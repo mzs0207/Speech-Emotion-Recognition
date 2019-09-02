@@ -15,7 +15,7 @@ class Config:
     # Opensmile 标准特征集
     CONFIG = 'IS10_paraling'
     # Opensmile 安装路径
-    OPENSMILE_PATH = '/Users/zou/opensmile-2.3.0'
+    OPENSMILE_PATH = '/Users/mengzengshan/Downloads/opensmile-2.3.0'
     # 每个特征集的特征数量
     FEATURE_NUM = {
         'IS09_emotion': 384,
