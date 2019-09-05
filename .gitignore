@@ -1,3 +1,7 @@
 *.pyc
 venv
 .vscode
+*.xml
+*.iml
+*.wav
+*.csv
