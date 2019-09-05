@@ -1,22 +1,21 @@
 import os
 import re
 import sys
+from random import shuffle
+import pickle
+
 import librosa
 import librosa.display
-from random import shuffle
 import numpy as np
-from typing import Tuple
-import pickle
 import pandas as pd
 from sklearn.externals import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
-from Config import Config
+from codes.model.Config import Config
 
 
 def features(X, sample_rate):
-
     stft = np.abs(librosa.stft(X))
 
     # fmin 和 fmax 对应于人类语音的最小最大基本频率
@@ -81,21 +80,20 @@ def features(X, sample_rate):
     return ext_features
 
 
-def extract_features(file, pad = False):
-    X, sample_rate = librosa.load(file, sr = None)
+def extract_features(file, pad=False):
+    X, sample_rate = librosa.load(file, sr=None)
     max_ = X.shape[0] / sample_rate
     if pad:
         length = (max_ * sample_rate) - X.shape[0]
         X = np.pad(X, (0, int(length)), 'constant')
     return features(X, sample_rate)
-    
+
 
 def get_max_min(files):
-
     min_, max_ = 100, 0
 
     for file in files:
-        sound_file, samplerate = librosa.load(file, sr = None)
+        sound_file, samplerate = librosa.load(file, sr=None)
         t = sound_file.shape[0] / samplerate
         if t < min_:
             min_ = t
@@ -115,8 +113,8 @@ get_data_path():
     所有音频的路径
 '''
 
-def get_data_path(data_path: str):
 
+def get_data_path(data_path: str):
     wav_file_path = []
 
     cur_dir = os.getcwd()
@@ -153,9 +151,9 @@ load_feature():
     训练数据、测试数据和对应的标签
 '''
 
-def load_feature(feature_path: str, train: bool):
 
-    features = pd.DataFrame(data = joblib.load(feature_path), columns = ['file_name', 'features', 'emotion'])
+def load_feature(feature_path: str, train: bool):
+    features = pd.DataFrame(data=joblib.load(feature_path), columns=['file_name', 'features', 'emotion'])
 
     X = list(features['features'])
     Y = list(features['emotion'])
@@ -167,9 +165,9 @@ def load_feature(feature_path: str, train: bool):
         joblib.dump(scaler, Config.MODEL_PATH + 'SCALER_LIBROSA.m')
         X = scaler.transform(X)
 
-        x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size = 0.2, random_state = 42)
+        x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
         return x_train, x_test, y_train, y_test
-    
+
     else:
         # 标准化数据
         # 加载标准化模型
@@ -193,9 +191,10 @@ get_data():
     train = False:
         预测数据特征
 '''
+
+
 def get_data(data_path: str, feature_path: str, train: bool):
-    
-    if(train == True):
+    if (train == True):
         files = get_data_path(data_path)
         max_, min_ = get_max_min(files)
 
@@ -218,9 +217,8 @@ def get_data(data_path: str, feature_path: str, train: bool):
         features = extract_features(data_path)
         mfcc_data = [[data_path, features, -1]]
 
-
     cols = ['file_name', 'features', 'emotion']
-    mfcc_pd = pd.DataFrame(data = mfcc_data, columns = cols)
+    mfcc_pd = pd.DataFrame(data=mfcc_data, columns=cols)
     pickle.dump(mfcc_data, open(feature_path, 'wb'))
-    
-    return load_feature(feature_path, train = train)
+
+    return load_feature(feature_path, train=train)

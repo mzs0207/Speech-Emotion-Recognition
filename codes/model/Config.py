@@ -1,9 +1,15 @@
-# 参数配置
+#!/usr/bin/env python
+# coding:utf8
+"""
+参数配置
+"""
+import os
 
-class Config:
 
+class Config(object):
+    project_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
     # 数据集路径
-    DATA_PATH = 'Datasets/CASIA/6'
+    DATA_PATH = project_path+'/Datasets/CASIA/6'
     # 情感标签
     CLASS_LABELS = ("angry", "fear", "happy", "neutral", "sad", "surprise")
     # CLASS_LABELS = ("positive", "negative", "neutral")
@@ -27,7 +33,7 @@ class Config:
     }
 
     # 特征存储路径
-    FEATURE_PATH = 'Features/6-category/'
+    FEATURE_PATH = project_path+'/Features/6-category/'
     # 训练特征存储路径（Opensmile）
     TRAIN_FEATURE_PATH_OPENSMILE = FEATURE_PATH + 'train_opensmile_casia.csv'
     # 预测特征存储路径（Opensmile）
@@ -36,6 +42,8 @@ class Config:
     TRAIN_FEATURE_PATH_LIBROSA = FEATURE_PATH + 'train_librosa_casia.p'
     # 预测特征存储路径（librosa）
     PREDICT_FEATURE_PATH_LIBROSA = FEATURE_PATH + 'test_librosa_casia.p'
+    # 测试集的存储目录
+    TEST_DATA_PATH = project_path + '/Test/'
 
     # 模型存储路径
-    MODEL_PATH = 'Models/'
+    MODEL_PATH = project_path+'/Models/'

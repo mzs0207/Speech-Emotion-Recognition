@@ -1,15 +1,13 @@
 import os
 import csv
 import sys
-import time
+
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
-from typing import Tuple
 from sklearn.externals import joblib
 from sklearn.model_selection import train_test_split
 
-from Config import Config
-
+from codes.model.Config import Config
 
 '''
 get_feature_opensmile(): 
@@ -22,14 +20,14 @@ get_feature_opensmile():
     该音频的特征向量
 '''
 
+
 def get_feature_opensmile(filepath: str):
     # Opensmile 命令
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    cmd = 'cd ' + Config.OPENSMILE_PATH + ' && ./SMILExtract -C config/' + Config.CONFIG + '.conf -I ' + filepath + ' -O ' + BASE_DIR + '/' + Config.FEATURE_PATH + 'single_feature.csv'
+    cmd = 'cd ' + Config.OPENSMILE_PATH + ' && ./SMILExtract -C config/' + Config.CONFIG + '.conf -I ' +Config.TEST_DATA_PATH + filepath + ' -O ' +  Config.FEATURE_PATH + 'single_feature.csv'
     print("Opensmile cmd: ", cmd)
     os.system(cmd)
-    
-    reader = csv.reader(open(BASE_DIR + '/' + Config.FEATURE_PATH + 'single_feature.csv','r'))
+
+    reader = csv.reader(open(Config.FEATURE_PATH + 'single_feature.csv', 'r'))
     rows = [row for row in reader]
     last_line = rows[-1]
     return last_line[1: Config.FEATURE_NUM[Config.CONFIG] + 1]
@@ -47,13 +45,14 @@ load_feature():
     训练数据、测试数据和对应的标签
 '''
 
+
 def load_feature(feature_path: str, train: bool):
     # 加载特征数据
     df = pd.read_csv(feature_path)
     features = [str(i) for i in range(1, Config.FEATURE_NUM[Config.CONFIG] + 1)]
 
-    X = df.loc[:,features].values
-    Y = df.loc[:,'label'].values
+    X = df.loc[:, features].values
+    Y = df.loc[:, 'label'].values
 
     if train == True:
         # 标准化数据 
@@ -63,7 +62,7 @@ def load_feature(feature_path: str, train: bool):
         X = scaler.transform(X)
 
         # 划分训练集和测试集
-        x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size = 0.2, random_state = 42)
+        x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
         return x_train, x_test, y_train, y_test
     else:
         # 标准化数据
@@ -89,9 +88,9 @@ get_data():
         预测数据特征
 '''
 
+
 # Opensmile 提取特征
 def get_data(data_path: str, feature_path: str, train: bool):
-
     writer = csv.writer(open(feature_path, 'w'))
     first_row = ['label']
     for i in range(1, Config.FEATURE_NUM[Config.CONFIG] + 1):
@@ -118,7 +117,7 @@ def get_data(data_path: str, feature_path: str, train: bool):
                 if not filename.endswith('wav'):
                     continue
                 filepath = os.getcwd() + '/' + filename
-                
+
                 # 提取该音频的特征
                 feature_vector = get_feature_opensmile(filepath)
                 feature_vector.insert(0, label)
@@ -128,7 +127,7 @@ def get_data(data_path: str, feature_path: str, train: bool):
             sys.stderr.write("Ended reading folder %s\n" % directory)
             os.chdir('..')
         os.chdir(cur_dir)
-    
+
     else:
         feature_vector = get_feature_opensmile(data_path)
         feature_vector.insert(0, '-1')
@@ -138,5 +137,5 @@ def get_data(data_path: str, feature_path: str, train: bool):
 
     # 一个玄学 bug 的暂时性解决方案
     # 这里无法直接加载除了 IS10_paraling 以外的其他特征集的预测数据特征，非常玄学
-    if(train == True):
-        return load_feature(feature_path, train = train)
+    if (train == True):
+        return load_feature(feature_path, train=train)
