@@ -1,0 +1,1 @@
+gunicorn -c gun.py -k gevent  web_service_speech_emotion_recognition:app

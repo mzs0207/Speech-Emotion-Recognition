@@ -29,6 +29,9 @@ def load_model(load_model_name: str, model_name: str):
         # 加载json
         model_path = Config.MODEL_PATH + load_model_name + '.h5'
         model_json_path = Config.MODEL_PATH + load_model_name + '.json'
+        print("model path")
+        print(model_path)
+        print(model_json_path)
 
         json_file = open(model_json_path, 'r')
         loaded_model_json = json_file.read()
@@ -37,6 +40,7 @@ def load_model(load_model_name: str, model_name: str):
 
         # 加载权重
         model.load_weights(model_path)
+        model._make_predict_function()
 
     elif (model_name == 'svm' or model_name == 'mlp'):
         model_path = Config.MODEL_PATH + load_model_name + '.m'
