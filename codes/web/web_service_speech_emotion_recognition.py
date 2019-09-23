@@ -8,6 +8,26 @@ from flask import request, jsonify
 import json
 from codes.model.Utils import load_model
 from codes.model.SER import Predict
+from codes.model.Config import Config
+import requests
+import os
+
+
+def download_file(url, pre_directory=Config.TEST_DATA_PATH, user_name='mirrelep_nginx', passwd='@Pxw19D#'):
+    """
+
+    :param url:
+    :param pre_directory:
+    :param user_name
+    :param passwd
+    :return:
+    """
+    file_name = str(url).split('/')[-1]
+    r = requests.get(url, auth=(user_name, passwd))
+    with open(os.path.join(pre_directory, file_name), 'wb') as w:
+        w.write(r.content)
+    return file_name
+
 
 model = load_model(load_model_name="LSTM_OPENSMILE", model_name="lstm" )
 
@@ -31,13 +51,31 @@ def speech_emotion_recognition():
     :return:
     """
     request_str = request.data
-    json_data = json.loads(request_str)
-    print(json_data)
-    predict_result = Predict(model, model_name="lstm", file_path=json_data['file_name'], feature_method='o')
+    response_data = {}
+    response_header = {
+        'tranceId': '0',
+        'code': 0,
+        'error': '',
+        'msg': 'success',
+        'msgType': 1
+    }
+    try:
+        json_data = json.loads(request_str)
+        response_header['tranceId'] = json_data['header']['tranceId']
+        print(json_data)
+        file_name = download_file(json_data['mediaUrl'])
+        predict_result = Predict(model, model_name="lstm", file_path=file_name, feature_method='o')
+        response_data["data"] = predict_result
 
-    response_data = {"code": 0, "result": predict_result}
+    except Exception as e:
+        response_header['code'] = 1
+        response_header['error'] = str(e)
+        response_header['msg'] = ""
+        response_data['data'] = {}
+    response_data['header'] = response_header
     return jsonify(response_data)
 
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=9600, debug=True)
+    #download_file('http://119.23.74.118:8080/file/201_sad.wav')

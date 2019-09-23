@@ -94,18 +94,19 @@ def Predict(model, model_name: str, file_path: str, feature_method: str = 'Opens
     if (model_name == 'lstm'):
         # 二维数组转三维（samples, time_steps, input_dim）
         test_feature = np.reshape(test_feature, (test_feature.shape[0], 1, test_feature.shape[1]))
-    print("test_feature")
-    print(test_feature)
-    print(test_feature.shape)
+    #print("test_feature")
+    #print(test_feature)
+    #print(test_feature.shape)
     result = model.predict(test_feature)
     if (model_name == 'lstm'):
         result = np.argmax(result)
 
     result_prob = model.predict_proba(test_feature)[0]
-    print('Recogntion: ', Config.CLASS_LABELS[int(result)])
-    print('Probability: ', result_prob)
+    #print('Recogntion: ', Config.CLASS_LABELS[int(result)])
+    #print('Probability: ', result_prob)
     #Radar(result_prob)
-    return Config.CLASS_LABELS[int(result)]
+
+    return {'label': Config.CLASS_LABELS[int(result)], 'probability': str(max(result_prob))}
 
 # model = Train(model_name = "lstm", save_model_name = "LSTM_OPENSMILE_1", if_load = True, feature_method = 'o')
 # 加载模型
