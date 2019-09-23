@@ -90,7 +90,7 @@ get_data():
 
 
 # Opensmile 提取特征
-def get_data(data_path: str, feature_path: str, train: bool):
+def get_data(data_path: str, feature_path: str, train: bool, delete=False):
     writer = csv.writer(open(feature_path, 'w'))
     first_row = ['label']
     for i in range(1, Config.FEATURE_NUM[Config.CONFIG] + 1):
@@ -132,6 +132,8 @@ def get_data(data_path: str, feature_path: str, train: bool):
         feature_vector = get_feature_opensmile(data_path)
         feature_vector.insert(0, '-1')
         writer.writerow(feature_vector)
+        if delete:
+            os.remove(data_path)
 
     print('Opensmile extract done.')
 

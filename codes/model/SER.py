@@ -79,14 +79,14 @@ Predict(): 预测音频情感
 '''
 
 
-def Predict(model, model_name: str, file_path: str, feature_method: str = 'Opensmile'):
+def Predict(model, model_name: str, file_path: str, feature_method: str = 'Opensmile', delete=False):
     #file_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/' + file_path
     playAudio(file_path)
     print("file_path:"+file_path)
 
     if (feature_method == 'o'):
         # 一个玄学 bug 的暂时性解决方案
-        of.get_data(file_path, Config.PREDICT_FEATURE_PATH_OPENSMILE, train=False)
+        of.get_data(file_path, Config.PREDICT_FEATURE_PATH_OPENSMILE, train=False, delete=delete)
         test_feature = of.load_feature(Config.PREDICT_FEATURE_PATH_OPENSMILE, train=False)
     elif (feature_method == 'l'):
         test_feature = lf.get_data(file_path, Config.PREDICT_FEATURE_PATH_LIBROSA, train=False)

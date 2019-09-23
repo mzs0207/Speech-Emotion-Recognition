@@ -64,7 +64,7 @@ def speech_emotion_recognition():
         response_header['tranceId'] = json_data['header']['tranceId']
         print(json_data)
         file_name = download_file(json_data['mediaUrl'])
-        predict_result = Predict(model, model_name="lstm", file_path=file_name, feature_method='o')
+        predict_result = Predict(model, model_name="lstm", file_path=file_name, feature_method='o', delete=True)
         response_data["data"] = predict_result
 
     except Exception as e:
