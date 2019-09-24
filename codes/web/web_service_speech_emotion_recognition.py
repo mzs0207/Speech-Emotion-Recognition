@@ -23,9 +23,10 @@ def download_file(url, pre_directory=Config.TEST_DATA_PATH, user_name='mirrelep_
     :return:
     """
     file_name = str(url).split('/')[-1]
-    r = requests.get(url, auth=(user_name, passwd))
+    r = requests.get(url, auth=(user_name, passwd),stream=True)
     with open(os.path.join(pre_directory, file_name), 'wb') as w:
-        w.write(r.content)
+        for chunk in r.iter_content(chunk_size=1024):
+            w.write(chunk)
     return file_name
 
 
