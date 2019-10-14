@@ -11,6 +11,7 @@ from codes.model.SER import Predict
 from codes.model.Config import Config
 import requests
 import os
+import traceback
 
 
 def download_file(url, pre_directory=Config.TEST_DATA_PATH, user_name='mirrelep_nginx', passwd='@Pxw19D#'):
@@ -73,6 +74,7 @@ def speech_emotion_recognition():
         response_header['error'] = str(e)
         response_header['msg'] = ""
         response_data['data'] = {}
+        traceback.print_exc()
     response_data['header'] = response_header
     return jsonify(response_data)
 

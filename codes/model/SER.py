@@ -81,7 +81,7 @@ Predict(): 预测音频情感
 
 def Predict(model, model_name: str, file_path: str, feature_method: str = 'Opensmile', delete=False):
     #file_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/' + file_path
-    playAudio(file_path)
+    #playAudio(file_path)
     print("file_path:"+file_path)
 
     if (feature_method == 'o'):

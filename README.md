@@ -338,6 +338,14 @@ Spectrogram(file_path)
 ```
 
 &nbsp;
+ubuntu 系统需要安装这个库
+$ sudo apt-get install portaudio19-dev python-pyaudio python3-pyaudio
+
+apt-get install libbz2-dev
+
+apt-get install build-essential
+
+
 
 ## Acknowledgements
 

@@ -133,7 +133,7 @@ def get_data(data_path: str, feature_path: str, train: bool, delete=False):
         feature_vector.insert(0, '-1')
         writer.writerow(feature_vector)
         if delete:
-            os.remove(data_path)
+            os.remove(Config.TEST_DATA_PATH+data_path)
 
     print('Opensmile extract done.')
 
