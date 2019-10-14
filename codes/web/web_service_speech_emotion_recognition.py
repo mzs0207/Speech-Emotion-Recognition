@@ -67,15 +67,15 @@ def speech_emotion_recognition():
         print(json_data)
         file_name = download_file(json_data['mediaUrl'])
         predict_result = Predict(model, model_name="lstm", file_path=file_name, feature_method='o', delete=True)
-        response_data["data"] = predict_result
+        response_data["body"] = predict_result
 
     except Exception as e:
         response_header['code'] = 1
         response_header['error'] = str(e)
         response_header['msg'] = ""
-        response_data['data'] = {}
+        response_data['body'] = {}
         traceback.print_exc()
-    response_data['header'] = response_header
+    response_data['head'] = response_header
     return jsonify(response_data)
 
 
