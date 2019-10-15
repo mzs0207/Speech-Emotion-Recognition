@@ -55,15 +55,15 @@ def speech_emotion_recognition():
     request_str = request.data
     response_data = {}
     response_header = {
-        'tranceId': '0',
+        'traceId': '0',
         'code': 0,
         'error': '',
         'msg': 'success',
-        'msgType': 1
+        'msgtype': 1
     }
     try:
         json_data = json.loads(request_str)
-        response_header['tranceId'] = json_data['header']['tranceId']
+        response_header['traceId'] = json_data['head']['traceId']
         print(json_data)
         file_name = download_file(json_data['mediaUrl'])
         predict_result = Predict(model, model_name="lstm", file_path=file_name, feature_method='o', delete=True)
