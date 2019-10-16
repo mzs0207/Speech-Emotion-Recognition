@@ -6,6 +6,7 @@ from codes.model.DNN_Model import LSTM_Model
 from codes.model.Utils import Radar, playAudio
 from codes.model import Librosa_Feature as lf, Opensmile_Feature as of
 from codes.model.Config import Config
+import os
 
 '''
 Train(): 训练模型
@@ -86,8 +87,10 @@ def Predict(model, model_name: str, file_path: str, feature_method: str = 'Opens
 
     if (feature_method == 'o'):
         # 一个玄学 bug 的暂时性解决方案
-        of.get_data(file_path, Config.PREDICT_FEATURE_PATH_OPENSMILE, train=False, delete=delete)
-        test_feature = of.load_feature(Config.PREDICT_FEATURE_PATH_OPENSMILE, train=False)
+        csv_file_path = '{0}/test_{1}.csv'.format(Config.PREDICT_FEATURE_PATH_OPENSMILE, file_path.split('.')[0])
+        of.get_data(file_path,csv_file_path , train=False, delete=delete)
+        test_feature = of.load_feature(csv_file_path, train=False)
+        os.remove(csv_file_path)
     elif (feature_method == 'l'):
         test_feature = lf.get_data(file_path, Config.PREDICT_FEATURE_PATH_LIBROSA, train=False)
 

@@ -25,6 +25,9 @@ def download_file(url, pre_directory=Config.TEST_DATA_PATH, user_name='mirrelep_
     """
     file_name = str(url).split('/')[-1]
     r = requests.get(url, auth=(user_name, passwd),stream=True)
+    if r.status_code != 200:
+        raise Exception("An error was found while downloading the wav file. status code:{0} reason:{1}".format(r.status_code,
+                                                                                                               r.reason))
     with open(os.path.join(pre_directory, file_name), 'wb') as w:
         for chunk in r.iter_content(chunk_size=1024):
             w.write(chunk)

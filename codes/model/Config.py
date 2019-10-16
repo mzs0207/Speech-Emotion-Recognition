@@ -37,7 +37,9 @@ class Config(object):
     # 训练特征存储路径（Opensmile）
     TRAIN_FEATURE_PATH_OPENSMILE = FEATURE_PATH + 'train_opensmile_casia.csv'
     # 预测特征存储路径（Opensmile）
-    PREDICT_FEATURE_PATH_OPENSMILE = FEATURE_PATH + 'test_opensmile_casia.csv'
+    PREDICT_FEATURE_PATH_OPENSMILE = FEATURE_PATH
+    #PREDICT_FEATURE_PATH_OPENSMILE = FEATURE_PATH + 'test_opensmile_casia.csv'
+
     # 训练特征存储路径（librosa）
     TRAIN_FEATURE_PATH_LIBROSA = FEATURE_PATH + 'train_librosa_casia.p'
     # 预测特征存储路径（librosa）

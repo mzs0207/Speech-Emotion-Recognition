@@ -23,13 +23,16 @@ get_feature_opensmile():
 
 def get_feature_opensmile(filepath: str):
     # Opensmile 命令
-    cmd = 'cd ' + Config.OPENSMILE_PATH + ' && ./SMILExtract -C config/' + Config.CONFIG + '.conf -I ' +Config.TEST_DATA_PATH + filepath + ' -O ' +  Config.FEATURE_PATH + 'single_feature.csv'
+    file_name = str(filepath).split('.')[0]
+    csv_file_path = Config.FEATURE_PATH + '{0}.csv'.format(file_name)
+    cmd = 'cd ' + Config.OPENSMILE_PATH + ' && ./SMILExtract -C config/' + Config.CONFIG + '.conf -I ' +Config.TEST_DATA_PATH + filepath + ' -O ' +  csv_file_path
     print("Opensmile cmd: ", cmd)
     os.system(cmd)
 
-    reader = csv.reader(open(Config.FEATURE_PATH + 'single_feature.csv', 'r'))
+    reader = csv.reader(open(csv_file_path, 'r'))
     rows = [row for row in reader]
     last_line = rows[-1]
+    os.remove(csv_file_path)
     return last_line[1: Config.FEATURE_NUM[Config.CONFIG] + 1]
 
 
