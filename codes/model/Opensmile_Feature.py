@@ -24,8 +24,15 @@ get_feature_opensmile():
 def get_feature_opensmile(filepath: str):
     # Opensmile 命令
     file_name = str(filepath).split('.')[0]
+    output_file = "{0}_output.wav".format(file_name)
+    convert_cmd = "ffmpeg -i {0} -acodec pcm_s16le -ac 1 -ar 16000 {1}".format(
+        Config.TEST_DATA_PATH + filepath,
+        Config.TEST_DATA_PATH + output_file
+    )
     csv_file_path = Config.FEATURE_PATH + '{0}.csv'.format(file_name)
-    cmd = 'cd ' + Config.OPENSMILE_PATH + ' && ./SMILExtract -C config/' + Config.CONFIG + '.conf -I ' +Config.TEST_DATA_PATH + filepath + ' -O ' +  csv_file_path
+    print("convert cmd:{0}".format(convert_cmd))
+    os.system(convert_cmd)
+    cmd = 'cd ' + Config.OPENSMILE_PATH + ' && ./SMILExtract -C config/' + Config.CONFIG + '.conf -I ' +Config.TEST_DATA_PATH + output_file + ' -O ' +  csv_file_path
     print("Opensmile cmd: ", cmd)
     os.system(cmd)
 
@@ -137,6 +144,7 @@ def get_data(data_path: str, feature_path: str, train: bool, delete=False):
         writer.writerow(feature_vector)
         if delete:
             os.remove(Config.TEST_DATA_PATH+data_path)
+            os.remove("{0}{1}_output.wav".format(Config.TEST_DATA_PATH,data_path.split('.')[0]))
 
     print('Opensmile extract done.')
 

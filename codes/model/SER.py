@@ -109,7 +109,7 @@ def Predict(model, model_name: str, file_path: str, feature_method: str = 'Opens
     #print('Probability: ', result_prob)
     #Radar(result_prob)
 
-    return {'label': Config.CLASS_LABELS[int(result)], 'probability': str(max(result_prob))}
+    return {label: str(prob) for label, prob in zip(Config.CLASS_LABELS, result_prob)}
 
 # model = Train(model_name = "lstm", save_model_name = "LSTM_OPENSMILE_1", if_load = True, feature_method = 'o')
 # 加载模型
