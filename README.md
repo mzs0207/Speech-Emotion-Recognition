@@ -345,6 +345,7 @@ apt-get install libbz2-dev
 
 apt-get install build-essential
 
+yum install -y portaudio portaudio-devel 
 
 
 ## Acknowledgements
